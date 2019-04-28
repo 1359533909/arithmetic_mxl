@@ -4,10 +4,12 @@ public class TravesingGraph {
 	private int vertexSize;//顶点数量
 	private int[] vertexs; //顶点数组
 	private int[][] matrix;
+	private boolean [] isVisited;
 	private final static int MAX_WEIGHT=1000;
 	public TravesingGraph(int vertexSize) {
 		this.vertexSize=vertexSize;
 		matrix=new int[vertexSize][vertexSize];
+		isVisited=new boolean[vertexSize];
 	}
 	/**
 	 * 出度
@@ -41,8 +43,61 @@ public class TravesingGraph {
 	}
 	/**
 	 * 
-	 * @return
+	 * 获得第一个邻接点
 	 */
+	public int getFirstNeighBor(int index) {
+		for(int j=0;j<vertexSize;j++) {
+			if(matrix[index][j]>0&&matrix[index][j]<MAX_WEIGHT) {
+				return j;
+			}
+		}
+		return -1;
+	}
+	/**
+	 *根据前一个邻接点的下标取得下一个邻接点 
+	 *v表示要找的顶点
+	 *index表示该顶点相对于哪个邻接点获取下一个邻接点
+	 */
+	public int getNextNeighbor(int v,int index) {
+		for(int j=index+1;j<vertexSize;j++) {
+			if(matrix[v][j]>0&&matrix[v][j]<MAX_WEIGHT) {
+				return j;
+			}
+		}
+		return -1;
+	}
+	/**
+	 * 图的深度优先遍历
+	 */
+	private void depthFirstSearch(int i) {
+		isVisited[i]=true;
+		int w = getFirstNeighBor(i);
+		while(w!=-1) {
+			if(!isVisited[w]) {
+//				需要遍历该结点
+				System.out.println("访问到了:"+w+"顶点");
+				depthFirstSearch(w);
+			}
+			w=getNextNeighbor(i, w);
+		}
+	}
+	
+	/**
+	 * 对外公开的深度优先遍历
+	 */
+	public void depthFirstSearch() {
+		isVisited = new boolean[vertexSize];
+		for(int i=0;i<vertexSize;i++) {
+			if(!isVisited[i]) {
+				System.out.println("访问到了:"+i+"顶点");
+				depthFirstSearch(i);
+			}
+		}
+		isVisited=new boolean[vertexSize];
+	}
+	
+	
+	
 	public int getWeight(int v1,int v2) {
 		return matrix[v1][v2]==0?0:(matrix[v1][v2]==MAX_WEIGHT?-1:matrix[v1][v2]);
 	}
@@ -81,9 +136,6 @@ public class TravesingGraph {
 		graph.matrix[6]=a7;
 		graph.matrix[7]=a8;
 		graph.matrix[8]=a9;
-		int outDegree = graph.getOutDegree(1);
-		System.out.println(outDegree);
-		int inputDegree = graph.getInputDegree(1);
-		System.out.println(inputDegree);
+		graph.depthFirstSearch();
 	}
 }

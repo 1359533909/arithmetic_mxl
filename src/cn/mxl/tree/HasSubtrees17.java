@@ -2,7 +2,7 @@ package cn.mxl.tree;
 
 import cn.mxl.tool.TreeNode;
 
-public class HasSubtress17 {
+public class HasSubtrees17 {
 
 }
 class SolutionHasSubtress17 {
