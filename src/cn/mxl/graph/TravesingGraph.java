@@ -1,5 +1,7 @@
 package cn.mxl.graph;
 
+import java.util.LinkedList;
+
 public class TravesingGraph {
 	private int vertexSize;//顶点数量
 	private int[] vertexs; //顶点数组
@@ -96,7 +98,39 @@ public class TravesingGraph {
 		isVisited=new boolean[vertexSize];
 	}
 	
-	
+	/**
+	 * 广度优先遍历
+	 */
+	public void broadFirstSearch() {
+		isVisited=new boolean[vertexSize];
+		for(int i=0;i<vertexSize;i++) {
+			if(!isVisited[i]) {
+				broadFirstSearch(i);
+			}
+		}
+	}
+	/**
+	 * 对外的广度优先遍历
+	 */
+	public void broadFirstSearch(int i) {
+		int u,w;
+		LinkedList<Integer> queue=new LinkedList<Integer>();
+		System.out.println("访问到:"+i+"顶点");
+		isVisited[i]=true;
+		queue.add(i);//第一次把v0加到队列
+		while(!queue.isEmpty()) {
+			u=queue.removeFirst().intValue();
+			w=getFirstNeighBor(u);
+			while(w!=-1) {
+				if(!isVisited[w]) {
+					System.out.println("访问到了:"+w+"顶点");
+					isVisited[w]=true;
+					queue.add(w);
+				}
+				w=getNextNeighbor(u, w);
+			}
+		}
+	}
 	
 	public int getWeight(int v1,int v2) {
 		return matrix[v1][v2]==0?0:(matrix[v1][v2]==MAX_WEIGHT?-1:matrix[v1][v2]);
@@ -137,5 +171,6 @@ public class TravesingGraph {
 		graph.matrix[7]=a8;
 		graph.matrix[8]=a9;
 		graph.depthFirstSearch();
+		graph.broadFirstSearch();
 	}
 }
